@@ -40,3 +40,26 @@ def semana(fecha):
 
 
 df["dia_sem"] = df["date"].apply(semana)
+
+
+
+#  PASO 3: añadir los periodos 
+
+df["periodo"] = ""
+df["time"] = pd.to_datetime(df["time"],format="%H:%M:%S").dt.time
+
+
+def periodo (row):
+  
+    dia_sem = row["dia_sem"]
+    hora = row["time"]
+
+    if (dia_sem in [6, 7]) or (datetime.time(0, 0) <= hora < datetime.time(8, 0)):
+        return 3
+    elif (datetime.time(10, 0) <= hora < datetime.time(14, 0)) or (datetime.time(18, 0) <= hora < datetime.time(22, 0)):
+        return 2
+    else:
+        return 1
+            
+        
+df["periodo"] = df.apply(periodo, axis=1)
